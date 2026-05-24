@@ -22,6 +22,7 @@ class RealizationDocumentResource extends Resource
 protected static ?string $navigationIcon = 'heroicon-o-folder';
 
 protected static ?string $navigationLabel = 'Realization Documents';
+protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {

@@ -22,6 +22,7 @@ class PlantProgressResource extends Resource
 protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
 protected static ?string $navigationLabel = 'Plant Progress';
+protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {

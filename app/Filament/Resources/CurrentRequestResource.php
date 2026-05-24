@@ -22,6 +22,7 @@ class CurrentRequestResource extends Resource
 protected static ?string $navigationIcon = 'heroicon-o-clock';
 
 protected static ?string $navigationLabel = 'Current Requests';
+protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

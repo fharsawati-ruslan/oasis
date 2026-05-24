@@ -22,6 +22,7 @@ class ReceiptTransactionResource extends Resource
 protected static ?string $navigationIcon = 'heroicon-o-receipt-percent';
 
 protected static ?string $navigationLabel = 'Receipts & Transactions';
+protected static ?int $navigationSort = 8;
 
     public static function form(Form $form): Form
     {

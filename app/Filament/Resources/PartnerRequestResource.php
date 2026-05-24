@@ -22,6 +22,7 @@ class PartnerRequestResource extends Resource
 protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
 protected static ?string $navigationLabel = 'Partner Requests';
+protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {

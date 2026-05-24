@@ -22,6 +22,7 @@ class DistributionResource extends Resource
 protected static ?string $navigationIcon = 'heroicon-o-share';
 
 protected static ?string $navigationLabel = 'Distribution List';
+protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

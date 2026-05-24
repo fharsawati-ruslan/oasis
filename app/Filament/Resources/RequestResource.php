@@ -21,7 +21,9 @@ class RequestResource extends Resource
 
 protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
+
 protected static ?string $navigationLabel = 'Requests';
+protected static ?int $navigationSort = 8;
 
     public static function form(Form $form): Form
     {
