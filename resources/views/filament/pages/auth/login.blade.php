@@ -1,3 +1,4 @@
+
 <x-filament-panels::page.simple>
 
 <style>
@@ -344,4 +345,4 @@
 
 </script>
 
-</x-filament-panels::page.simple>s
+</x-filament-panels::page.simple>
