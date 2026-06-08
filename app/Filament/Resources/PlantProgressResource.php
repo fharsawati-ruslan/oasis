@@ -5,12 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PlantProgressResource\Pages;
 use App\Models\PlantProgress;
 
-use Filament\Forms;
 use Filament\Forms\Form;
-
 use Filament\Resources\Resource;
 
-use Filament\Tables;
 use Filament\Tables\Table;
 
 use Filament\Forms\Components\Section;
@@ -53,7 +50,16 @@ class PlantProgressResource extends Resource
 
                         DatePicker::make('tanggal_tanam'),
 
-                    ])->columns(4),
+                        // TEST upload di luar repeater
+                        FileUpload::make('test_upload')
+                            ->label('Test Upload')
+                            ->image()
+                            ->disk('public')
+                            ->directory('test-upload')
+                            ->visibility('public'),
+
+                    ])
+                    ->columns(4),
 
                 Section::make('Monitoring Progress 90 Hari')
                     ->schema([
@@ -86,8 +92,17 @@ class PlantProgressResource extends Resource
                                 Textarea::make('keterangan'),
 
                                 FileUpload::make('gambar')
+                                    ->label('Gambar Progress')
                                     ->image()
-                                    ->directory('plant-progress'),
+                                    ->disk('public')
+                                    ->directory('plant-progress')
+                                    ->visibility('public')
+                                    ->preserveFilenames()
+                                    ->moveFiles()
+                                    ->maxSize(5120)
+                                    ->downloadable()
+                                    ->openable()
+                                    ->columnSpanFull(),
 
                             ])
                             ->columns(2)
@@ -112,9 +127,9 @@ class PlantProgressResource extends Resource
 
                                 ['hari' => 90, 'kategori' => 'panen'],
 
-                            ])
+                            ]),
 
-                    ])
+                    ]),
 
             ]);
     }
