@@ -32,8 +32,7 @@ class TransactionResource extends Resource
                 Forms\Components\Select::make('company_id')
                     ->label('Company')
                     ->options(
-                        Company::query()
-                            ->pluck('company_name', 'id')
+                        Company::query()->pluck('company_name', 'id')
                     )
                     ->searchable()
                     ->required(),
@@ -41,8 +40,7 @@ class TransactionResource extends Resource
                 Forms\Components\Select::make('transaction_category_id')
                     ->label('Category')
                     ->options(
-                        TransactionCategory::query()
-                            ->pluck('category_name', 'id')
+                        TransactionCategory::query()->pluck('category_name', 'id')
                     )
                     ->searchable()
                     ->required(),
@@ -65,12 +63,13 @@ class TransactionResource extends Resource
                     ->columnSpanFull(),
 
                 Forms\Components\FileUpload::make('invoice_file')
+                    ->disk('public')
                     ->directory('invoices')
-                    ->acceptedFileTypes([
-                        'image/jpeg',
-                        'image/png',
-                        'application/pdf',
-                    ]),
+                    ->image()
+                    ->imagePreviewHeight('250')
+                    ->openable()
+                    ->downloadable()
+                    ->previewable(),
 
                 Forms\Components\Select::make('status')
                     ->options([
@@ -108,6 +107,18 @@ class TransactionResource extends Resource
                         'danger' => 'expense',
                     ]),
 
+                Tables\Columns\ImageColumn::make('invoice_file')
+                    ->disk('public')
+                    ->label('Invoice')
+                    ->square()
+                    ->height(60)
+                    ->url(
+                        fn ($record) => $record->invoice_file
+                            ? asset('storage/' . $record->invoice_file)
+                            : null
+                    )
+                    ->openUrlInNewTab(),
+
                 Tables\Columns\TextColumn::make('amount')
                     ->money('IDR')
                     ->sortable(),
@@ -133,7 +144,29 @@ class TransactionResource extends Resource
 
             ])
             ->actions([
+
+                Tables\Actions\Action::make('preview')
+                    ->icon('heroicon-o-eye')
+                    ->label('Preview')
+                    ->url(
+                        fn ($record) => $record->invoice_file
+                            ? asset('storage/' . $record->invoice_file)
+                            : '#'
+                    )
+                    ->openUrlInNewTab(),
+
+                Tables\Actions\Action::make('download')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->label('Download')
+                    ->url(
+                        fn ($record) => $record->invoice_file
+                            ? asset('storage/' . $record->invoice_file)
+                            : '#'
+                    )
+                    ->openUrlInNewTab(),
+
                 Tables\Actions\EditAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
