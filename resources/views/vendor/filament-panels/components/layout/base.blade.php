@@ -52,7 +52,50 @@
                 }
             }
         </style>
+<style>
+:root {
+    --primary-color: #2563eb;
+}
 
+/* Background */
+.fi-body {
+    background: #f3f4f6 !important;
+}
+
+/* Sidebar */
+.fi-sidebar {
+    background: #ffffff !important;
+    border-right: 1px solid #e5e7eb;
+}
+
+/* Menu */
+.fi-sidebar-item a {
+    color: #374151 !important;
+}
+
+/* Hover */
+.fi-sidebar-item a:hover {
+    background: #f3f4f6 !important;
+}
+
+/* Active */
+.fi-sidebar-item-active a {
+background: #dbeafe !important;
+    color: #1d4ed8 !important;
+    border-left: 4px solid #2563eb;
+
+
+}
+
+/* Card */
+.fi-section,
+.fi-widget,
+.fi-ta {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px;
+}}
+</style>
         @filamentStyles
 
         {{ filament()->getTheme()->getHtml() }}

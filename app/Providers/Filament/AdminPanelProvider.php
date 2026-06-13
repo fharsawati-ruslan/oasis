@@ -30,9 +30,14 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login(\App\Filament\Pages\Auth\Login::class)
+             ->brandName('ERP SAMUDRA')
             ->colors([
                 'primary' => Color::Blue,
+             
+		
             ])
+
+	     
             ->discoverResources(
                 in: app_path('Filament/Resources'),
                 for: 'App\\Filament\\Resources'

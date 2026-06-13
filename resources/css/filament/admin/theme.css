@@ -1,3 +1,72 @@
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
 
 @config 'tailwind.config.js';
+
+/* BACKGROUND */
+.fi-body {
+    background-color: #f1f5f9;
+}
+
+/* SIDEBAR */
+.fi-sidebar {
+    background-color: #0f172a;
+    border-right: 1px solid #1e293b;
+}
+
+/* Logo ERP */
+.fi-logo {
+    color: white !important;
+    font-weight: 700;
+}
+
+/* Menu */
+.fi-sidebar-item a {
+    color: #cbd5e1 !important;
+}
+
+/* Hover */
+.fi-sidebar-item a:hover {
+    background-color: #1e293b !important;
+    color: white !important;
+}
+
+/* Menu aktif */
+.fi-sidebar-item-active a {
+    background-color: #2563eb !important;
+    color: white !important;
+    border-radius: 10px;
+}
+
+/* Card */
+.fi-section,
+.fi-widget,
+.fi-ta,
+.fi-form,
+.fi-modal-content {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px;
+}
+
+/* Header */
+.fi-topbar {
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Table */
+.fi-ta-table {
+    background: white;
+}
+
+/* Button */
+.fi-btn-color-primary {
+    background-color: #2563eb !important;
+}
+
+/* Statistik dashboard */
+.fi-wi-stats-overview-stat {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+}
