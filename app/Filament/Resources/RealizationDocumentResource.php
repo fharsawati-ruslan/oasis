@@ -3,32 +3,84 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\RealizationDocumentResource\Pages;
-use App\Filament\Resources\RealizationDocumentResource\RelationManagers;
 use App\Models\RealizationDocument;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RealizationDocumentResource extends Resource
 {
     protected static ?string $model = RealizationDocument::class;
 
-   protected static ?string $navigationGroup = 'Documents';
+    protected static ?string $navigationGroup = 'Documents';
 
-protected static ?string $navigationIcon = 'heroicon-o-folder';
+    protected static ?string $navigationIcon = 'heroicon-o-folder-open';
 
-protected static ?string $navigationLabel = 'Realization Documents';
-protected static ?int $navigationSort = 7;
+    protected static ?string $navigationLabel = 'Realization Documents';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+
+                Forms\Components\Section::make('Document Information')
+                    ->schema([
+
+                        Forms\Components\Select::make('company_id')
+                            ->label('Company')
+                            ->relationship('company', 'company_name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+
+                        Forms\Components\TextInput::make('document_number')
+                            ->label('Document Number')
+                            ->required()
+                            ->maxLength(255),
+
+                        Forms\Components\TextInput::make('title')
+                            ->label('Document Title')
+                            ->required()
+                            ->maxLength(255),
+
+                        Forms\Components\DatePicker::make('document_date')
+                            ->required(),
+
+                        Forms\Components\Select::make('status')
+                            ->options([
+                                'draft' => 'Draft',
+                                'review' => 'Review',
+                                'approved' => 'Approved',
+                                'archived' => 'Archived',
+                            ])
+                            ->default('draft')
+                            ->required(),
+
+                    ])
+                    ->columns(2),
+
+                Forms\Components\Section::make('Document File')
+                    ->schema([
+
+                        Forms\Components\FileUpload::make('file_path')
+                            ->label('PDF Document')
+                            ->directory('realization-documents')
+                            ->acceptedFileTypes([
+                                'application/pdf',
+                            ])
+                            ->downloadable()
+                            ->openable()
+                            ->required(),
+
+                        Forms\Components\Textarea::make('description')
+                            ->rows(5)
+                            ->columnSpanFull(),
+
+                    ]),
             ]);
     }
 
@@ -36,14 +88,72 @@ protected static ?int $navigationSort = 7;
     {
         return $table
             ->columns([
-                //
+
+                Tables\Columns\TextColumn::make('company.company_name')
+                    ->label('Company')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('document_number')
+                    ->label('Doc Number')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('title')
+                    ->searchable()
+                    ->limit(40),
+
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'draft' => 'gray',
+                        'review' => 'warning',
+                        'approved' => 'success',
+                        'archived' => 'danger',
+                        default => 'gray',
+                    }),
+
+                Tables\Columns\TextColumn::make('document_date')
+                    ->date('d M Y')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->since()
+                    ->label('Uploaded'),
+
             ])
+
             ->filters([
-                //
+
+                Tables\Filters\SelectFilter::make('company_id')
+                    ->relationship('company', 'company_name'),
+
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'review' => 'Review',
+                        'approved' => 'Approved',
+                        'archived' => 'Archived',
+                    ]),
+
             ])
+
             ->actions([
+
+                Tables\Actions\ViewAction::make(),
+
                 Tables\Actions\EditAction::make(),
+
+                Tables\Actions\DeleteAction::make(),
+
+                Tables\Actions\Action::make('download')
+                    ->label('Download')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->url(fn ($record) => asset('storage/' . $record->file_path))
+                    ->openUrlInNewTab(),
+
             ])
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -53,9 +163,7 @@ protected static ?int $navigationSort = 7;
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
