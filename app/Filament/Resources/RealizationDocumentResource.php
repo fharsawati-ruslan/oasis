@@ -37,6 +37,13 @@ class RealizationDocumentResource extends Resource
                             ->preload()
                             ->required(),
 
+                        Forms\Components\Select::make('document_category_id')
+                            ->label('Document Category')
+                            ->relationship('category', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+
                         Forms\Components\TextInput::make('document_number')
                             ->label('Document Number')
                             ->required()
@@ -48,9 +55,11 @@ class RealizationDocumentResource extends Resource
                             ->maxLength(255),
 
                         Forms\Components\DatePicker::make('document_date')
+                            ->label('Document Date')
                             ->required(),
 
                         Forms\Components\Select::make('status')
+                            ->label('Status')
                             ->options([
                                 'draft' => 'Draft',
                                 'review' => 'Review',
@@ -68,15 +77,18 @@ class RealizationDocumentResource extends Resource
 
                         Forms\Components\FileUpload::make('file_path')
                             ->label('PDF Document')
+                            ->disk('public')
                             ->directory('realization-documents')
                             ->acceptedFileTypes([
                                 'application/pdf',
                             ])
                             ->downloadable()
                             ->openable()
+                            ->preserveFilenames()
                             ->required(),
 
                         Forms\Components\Textarea::make('description')
+                            ->label('Description')
                             ->rows(5)
                             ->columnSpanFull(),
 
@@ -94,12 +106,20 @@ class RealizationDocumentResource extends Resource
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Category')
+                    ->badge()
+                    ->color('info')
+                    ->searchable()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('document_number')
-                    ->label('Doc Number')
+                    ->label('Document Number')
                     ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('title')
+                    ->label('Title')
                     ->searchable()
                     ->limit(40),
 
@@ -114,12 +134,13 @@ class RealizationDocumentResource extends Resource
                     }),
 
                 Tables\Columns\TextColumn::make('document_date')
+                    ->label('Date')
                     ->date('d M Y')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->since()
-                    ->label('Uploaded'),
+                    ->label('Uploaded')
+                    ->since(),
 
             ])
 
@@ -127,6 +148,9 @@ class RealizationDocumentResource extends Resource
 
                 Tables\Filters\SelectFilter::make('company_id')
                     ->relationship('company', 'company_name'),
+
+                Tables\Filters\SelectFilter::make('document_category_id')
+                    ->relationship('category', 'name'),
 
                 Tables\Filters\SelectFilter::make('status')
                     ->options([

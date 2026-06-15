@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\DocumentStats;
+
 use App\Filament\Widgets\FinanceChart;
 use App\Filament\Widgets\FinanceOverview;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
@@ -65,6 +67,9 @@ class AdminPanelProvider extends PanelProvider
 
             ->widgets([
                 Widgets\AccountWidget::class,
+
+                   // Dashboard Document
+                DocumentStats::class,
 
                 // Dashboard Finance
                 FinanceOverview::class,
