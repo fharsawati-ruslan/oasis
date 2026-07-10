@@ -21,3 +21,15 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+# Backup
+*.sql
+*.sql.gz
+*.tar.gz
+backup_*
+
+# IDE
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
