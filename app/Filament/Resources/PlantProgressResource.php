@@ -154,7 +154,7 @@ class PlantProgressResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPlantProgresses::route('/'),
+	'index' => Pages\ListPlantProgress::route('/'),
             'create' => Pages\CreatePlantProgress::route('/create'),
             'edit' => Pages\EditPlantProgress::route('/{record}/edit'),
         ];

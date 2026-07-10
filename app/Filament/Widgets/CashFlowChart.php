@@ -12,6 +12,9 @@ class CashFlowChart extends ApexChartWidget
 
     protected static ?string $heading = 'Cash Flow Analysis';
 
+     protected static ?int $sort = 2;
+
+
     protected int|string|array $columnSpan = 'full';
 
     protected function getOptions(): array
