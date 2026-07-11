@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Imports\InvestorPartnerImporter;
 use App\Filament\Resources\InvestorPartnerResource\Pages;
 use App\Models\InvestorPartner;
-
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -51,6 +51,19 @@ class InvestorPartnerResource extends Resource
                 TextInput::make('partner_name')
                     ->label('Partner Name')
                     ->maxLength(255),
+               
+                    TextInput::make('phone')
+                ->label('WhatsApp Number')
+    ->tel()
+    ->placeholder('628123456789')
+    ->prefixIcon('heroicon-o-device-phone-mobile')
+    ->maxLength(20),
+
+TextInput::make('email')
+    ->label('Email')
+    ->email()
+    ->prefixIcon('heroicon-o-envelope')
+    ->maxLength(255),
 
                 TextInput::make('land_area')
                     ->label('Land Area')
@@ -76,6 +89,9 @@ class InvestorPartnerResource extends Resource
 
                 TextInput::make('destination_account')
                     ->label('Destination Account'),
+                    TextInput::make('status')
+    ->label('Status')
+    ->default('active'),
 
                 Textarea::make('notes')
                     ->label('Notes')
@@ -96,18 +112,35 @@ class InvestorPartnerResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('partner_name')
+                
                     ->label('Partner')
                     ->searchable()
                     ->sortable(),
 
+                TextColumn::make('phone')
+    ->label('WhatsApp')
+    ->searchable(),
+
+TextColumn::make('email')
+    ->label('Email')
+    ->searchable(),
+
+    TextColumn::make('status')
+    ->badge()
+    ->colors([
+        'success' => 'active',
+        'warning' => 'waiting',
+        'danger' => 'closed',
+    ]),
+
                 TextColumn::make('investment_amount')
                     ->label('Investment')
-                    ->money('IDR')
+                   ->money('IDR', locale: 'id')
                     ->sortable(),
 
                 TextColumn::make('profit_sharing')
                     ->label('Profit Sharing')
-                    ->money('IDR')
+                     ->money('IDR', locale: 'id')
                     ->sortable(),
 
                 TextColumn::make('entry_date')
@@ -128,6 +161,7 @@ class InvestorPartnerResource extends Resource
 
                 TextColumn::make('destination_account')
                     ->label('Account'),
+                    
 
             ])
 
@@ -142,13 +176,34 @@ class InvestorPartnerResource extends Resource
 
             ])
 
-            ->actions([
+          ->actions([
 
-                Tables\Actions\EditAction::make(),
+    Tables\Actions\Action::make('whatsapp')
+        ->label('WhatsApp')
+        ->icon('heroicon-o-chat-bubble-left-right')
+        ->color('success')
+        ->visible(fn ($record) => filled($record->phone))
+        ->url(function ($record) {
 
-                Tables\Actions\DeleteAction::make(),
+            $phone = preg_replace('/[^0-9]/', '', $record->phone);
 
-            ])
+            $message = urlencode(
+                "Halo {$record->investor_name},
+
+Kami dari ERP SAMUDRA ingin menghubungi Bapak/Ibu terkait data investasi yang terdaftar.
+
+Terima kasih."
+            );
+
+            return "https://wa.me/{$phone}?text={$message}";
+        })
+        ->openUrlInNewTab(),
+
+    Tables\Actions\EditAction::make(),
+
+    Tables\Actions\DeleteAction::make(),
+
+])
 
             ->bulkActions([
 
