@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RabBookResource extends Resource
 {
+
+     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $model = RabBook::class;
 
   protected static ?string $navigationGroup = 'Finance';

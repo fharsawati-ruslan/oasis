@@ -11,6 +11,10 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\IconColumn;
+use Illuminate\Support\Facades\Storage;
+
 
 class TransactionResource extends Resource
 {
@@ -62,14 +66,23 @@ class TransactionResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
 
-                Forms\Components\FileUpload::make('invoice_file')
-                    ->disk('public')
-                    ->directory('invoices')
-                    ->image()
-                    ->imagePreviewHeight('250')
-                    ->openable()
-                    ->downloadable()
-                    ->previewable(),
+               Forms\Components\FileUpload::make('invoice_file')
+    ->label('Invoice / Receipt')
+    ->disk('public')
+    ->directory('invoices')
+    ->acceptedFileTypes([
+        'image/jpeg',
+        'image/png',
+        'image/webp',
+        'application/pdf',
+    ])
+    ->maxSize(5120)
+    ->imagePreviewHeight('250')
+    ->downloadable()
+    ->openable()
+    ->previewable()
+    ->helperText('Upload JPG, PNG, WEBP atau PDF (Max 5 MB)')
+    ->columnSpanFull(),
 
                 Forms\Components\Select::make('status')
                     ->options([
@@ -107,17 +120,13 @@ class TransactionResource extends Resource
                         'danger' => 'expense',
                     ]),
 
-                Tables\Columns\ImageColumn::make('invoice_file')
-                    ->disk('public')
-                    ->label('Invoice')
-                    ->square()
-                    ->height(60)
-                    ->url(
-                        fn ($record) => $record->invoice_file
-                            ? asset('storage/' . $record->invoice_file)
-                            : null
-                    )
-                    ->openUrlInNewTab(),
+            ImageColumn::make('invoice_file')
+    ->label('Invoice')
+    ->disk('public')
+    ->height(70)
+    ->width(70)
+    ->square()
+    ->defaultImageUrl(asset('images/no-image.png')),
 
                 Tables\Columns\TextColumn::make('amount')
                     ->money('IDR')
