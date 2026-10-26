@@ -3,9 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Services\FonnteService;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/admin/login');
 
 /*
 |--------------------------------------------------------------------------

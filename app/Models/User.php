@@ -16,6 +16,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     protected $hidden = [
@@ -23,8 +24,14 @@ class User extends Authenticatable implements FilamentUser
         'remember_token',
     ];
 
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'is_admin' => 'boolean',
+    ];
+
     public function canAccessPanel(Panel $panel): bool
     {
-            return $this->hasRole('super-admin');
+        return $this->hasRole('super_admin') || $this->is_admin;
     }
 }

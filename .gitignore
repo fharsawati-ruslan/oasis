@@ -33,3 +33,26 @@ backup_*
 
 # macOS
 .DS_Store
+
+# Local server files and caches
+/.cache/
+/.config/
+/.local/
+/.npm/
+/mysql,
+/app/Filament/Resources/TransactionResource.php.bak
+.env.*
+!.env.example
+node_modules/
+.next/
+vendor/
+*.dump
+*.bak
+*.backup*
+*.before-*
+backups/
+.cache/
+.npm/
+mysql,
+*.pem
+*.key

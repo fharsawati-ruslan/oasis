@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\TransactionResource\Pages;
 
 use App\Filament\Resources\TransactionResource;
-use App\Services\FonnteService;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateTransaction extends CreateRecord
@@ -14,35 +14,25 @@ class CreateTransaction extends CreateRecord
     {
         $record = $this->record;
 
-        $message =
-"🚀 *ERP SAMUDRA*
+        $type = $record->type === 'income'
+            ? 'Pemasukan'
+            : 'Pengeluaran';
 
-📢 *TRANSAKSI BARU*
-
-🏢 Company
-{$record->company->company_name}
-
-📂 Category
-{$record->category->category_name}
-
-💰 Type
-" . strtoupper($record->type) . "
-
-💵 Nominal
-Rp " . number_format($record->amount, 0, ',', '.') . "
-
-📄 Status
-{$record->status}
-
-📅 Tanggal
-{$record->transaction_date}
-
-━━━━━━━━━━━━━━
-ERP SAMUDRA";
-
-        FonnteService::send(
-            '082297408146',
-            $message
+        $amount = 'Rp ' . number_format(
+            $record->amount,
+            0,
+            ',',
+            '.'
         );
+
+        Notification::make()
+            ->success()
+            ->title('Transaksi Berhasil! 🎉')
+            ->body(
+                "{$type} sebesar {$amount} berhasil dicatat."
+            )
+            ->icon('heroicon-o-check-circle')
+            ->duration(5000)
+            ->send();
     }
 }

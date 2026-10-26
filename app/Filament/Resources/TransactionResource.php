@@ -120,13 +120,24 @@ class TransactionResource extends Resource
                         'danger' => 'expense',
                     ]),
 
-            ImageColumn::make('invoice_file')
+		ImageColumn::make('invoice_file')
     ->label('Invoice')
     ->disk('public')
+    ->visibility('public')
     ->height(70)
     ->width(70)
     ->square()
-    ->defaultImageUrl(asset('images/no-image.png')),
+    ->url(fn ($record) => $record->invoice_file
+        ? Storage::disk('public')->url($record->invoice_file)
+        : null
+    )
+    ->openUrlInNewTab()
+    ->defaultImageUrl(asset('images/no-image.png')),            
+
+
+
+
+
 
                 Tables\Columns\TextColumn::make('amount')
                     ->money('IDR')
